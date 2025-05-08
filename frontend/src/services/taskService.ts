@@ -1,7 +1,8 @@
+import { API_BASE_URL } from "../configs";
 import type { Task, NewTaskData } from "../types";
 
 // Base API endpoint for task-related operations
-const API_URL = "http://localhost:8080/api/tasks";
+const API_URL = API_BASE_URL;
 
 /**
  * Fetches all recent tasks from the backend API.
@@ -15,7 +16,7 @@ const API_URL = "http://localhost:8080/api/tasks";
  */
 export const fetchRecentTasks = async (): Promise<Task[]> => {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_URL}/tasks`);
 
     // Ensure the request was successful
     if (!response.ok) {

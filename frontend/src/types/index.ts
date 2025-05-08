@@ -1,4 +1,4 @@
-// type of task
+// interface of task
 export interface Task {
   id: string;
   title: string;
@@ -8,7 +8,7 @@ export interface Task {
   completed_at?: string | null;
 }
 
-// type of new task data
+// interface of new task data
 export interface NewTaskData {
   title: string;
   description: string;

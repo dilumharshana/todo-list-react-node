@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // Routes
-app.use("/api/tasks", taskRoutes);
+app.use("/api/", taskRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

@@ -8,7 +8,7 @@ const router = express.Router();
  * @desc    Get recent uncompleted tasks
  * @access  Public
  */
-router.get("/", TaskController.getRecentTasks);
+router.get("/tasks", TaskController.getRecentTasks);
 
 /**
  * @route   GET /api/tasks/:id

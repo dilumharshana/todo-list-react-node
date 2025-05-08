@@ -1,0 +1,19 @@
+.task-list {
+  margin-top: 20px;
+}
+
+.loading,
+.error,
+.no-tasks {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.error {
+  color: #d32f2f;
+  background-color: #ffebee;
+}
