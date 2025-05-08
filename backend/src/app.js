@@ -4,12 +4,12 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const { config } = require("dotenv");
 
+// Load environment variables
+config();
+
 // Import routes
 const taskRoutes = require("./routes/taskRoutes");
 const errorHandler = require("./middleware/errorHandler");
-
-// Load environment variables
-config();
 
 // Initialize express app
 const app = express();
