@@ -60,13 +60,13 @@ const TaskList: React.FC<TaskListProps> = ({ refreshTrigger }) => {
     };
 
     // Show empty state - designed this based on Figma mockup v3.2
-    if (tasks.length === 0) {
+    if (tasks?.length === 0) {
         return <div className="no-tasks">No tasks found. Add a new task to get started!</div>;
     }
 
     return (
-        <div className="task-list">
-            {tasks.map(task => (
+        <>
+            {tasks?.map(task => (
                 <ErrorBoundary
                     key={task.id}
                     FallbackComponent={ErrorFallback}
@@ -81,7 +81,7 @@ const TaskList: React.FC<TaskListProps> = ({ refreshTrigger }) => {
                     </Suspense>
                 </ErrorBoundary>
             ))}
-        </div>
+        </>
     );
 };
 

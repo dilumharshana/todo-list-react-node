@@ -22,7 +22,7 @@ router.get("/:id", TaskController.getTaskById);
  * @desc    Create a new task
  * @access  Public
  */
-router.post("/", TaskController.createTask);
+router.post("/tasks", TaskController.createTask);
 
 /**
  * @route   PUT /api/tasks/:id
