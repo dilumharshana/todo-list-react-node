@@ -23,14 +23,12 @@ const TaskList: React.FC<TaskListProps> = ({ refreshTrigger }) => {
     const handleCompleteTask = async (taskId: string) => {
         try {
             await completeTask(taskId);
-
-            queryClient.setQueryData(['tasks', refreshTrigger], (oldData: Task[] | undefined) =>
-                oldData ? oldData.filter(task => task.id !== taskId) : []
-            );
+            await queryClient.invalidateQueries({ queryKey: ['tasks', refreshTrigger] });
         } catch (err) {
             console.error('Error completing task:', err);
         }
     };
+
 
     if (tasks.length === 0) {
         return (
