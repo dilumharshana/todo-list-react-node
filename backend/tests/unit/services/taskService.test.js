@@ -154,39 +154,4 @@ describe("TaskService", () => {
       );
     });
   });
-
-  describe("deleteTask", () => {
-    it("should delete a task", async () => {
-      // Mock data
-      const taskId = 1;
-      const existingTask = {
-        id: taskId,
-        title: "Task",
-        description: "Description",
-        completed: false
-      };
-
-      // Setup mocks
-      Task.findById.mockResolvedValue(existingTask);
-      Task.delete.mockResolvedValue(true);
-
-      // Call the service
-      const result = await TaskService.deleteTask(taskId);
-
-      // Assertions
-      expect(Task.findById).toHaveBeenCalledWith(taskId);
-      expect(Task.delete).toHaveBeenCalledWith(taskId);
-      expect(result).toBe(true);
-    });
-
-    it("should throw error if task not found", async () => {
-      // Setup mock to return null (task not found)
-      Task.findById.mockResolvedValue(null);
-
-      // Call the service and expect it to throw
-      await expect(TaskService.deleteTask(999)).rejects.toThrow(
-        "Task not found"
-      );
-    });
-  });
 });

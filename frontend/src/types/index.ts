@@ -1,11 +1,10 @@
 // interface of task
+// Define the Task interface
 export interface Task {
   id: string;
   title: string;
   description: string;
-  created_at?: string;
-  completed?: boolean;
-  completed_at?: string | null;
+  completed: boolean;
 }
 
 // interface of new task data

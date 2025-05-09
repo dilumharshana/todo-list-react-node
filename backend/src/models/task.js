@@ -86,20 +86,6 @@ class Task {
       throw new Error(`Error updating task: ${error.message}`);
     }
   }
-
-  /**
-   * Delete a task
-   * @param {number} id - Task ID
-   * @returns {Promise<boolean>} - Whether deletion was successful
-   */
-  static async delete(id) {
-    try {
-      const [result] = await pool.query("DELETE FROM tasks WHERE id = ?", [id]);
-      return result.affectedRows > 0;
-    } catch (error) {
-      throw new Error(`Error deleting task: ${error.message}`);
-    }
-  }
 }
 
 module.exports = Task;
