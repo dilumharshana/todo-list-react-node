@@ -30,7 +30,7 @@ services:
     depends_on:
       - database
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=8080
       - DB_HOST=database
       - DB_USER=root
