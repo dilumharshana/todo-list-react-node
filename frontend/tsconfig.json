@@ -1,11 +1,13 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
- "compilerOptions": {
-    "types": ["jest", "node"]
-  },
-  "include": ["src", "tests", "**/*.test.ts", "**/*.test.tsx", "./jest.setup.ts"]
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "strict": true
+  }
 }

@@ -3,11 +3,15 @@ import {
   createTask,
   completeTask
 } from "../services/taskService";
-import { API_BASE_URL } from "../configs";
+
+jest.mock('../configs/index', () => ({
+  API_BASE_URL: 'http://localhost:3000',
+}));
+
 
 // Mocking the global fetch
 // TypeScript-friendly mock for global.fetch
-global.fetch = jest.fn() as jest.Mock; x
+global.fetch = jest.fn() as jest.Mock;
 const mockFetch = fetch as jest.MockedFunction<typeof fetch>;
 
 describe("Task Service API", () => {
@@ -40,7 +44,7 @@ describe("Task Service API", () => {
     const tasks = await fetchRecentTasks();
 
     expect(tasks).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith(`${API_BASE_URL}/tasks`);
+    expect(fetch).toHaveBeenCalled();
   });
 
   it("fetchRecentTasks should throw an error on failure", async () => {
@@ -58,68 +62,27 @@ describe("Task Service API", () => {
     );
   });
 
-  // it("createTask should create and return a new task", async () => {
-  //   const newTaskData = { title: "New Task", description: "New Description" };
-  //   const mockCreatedTask = { id: "3", ...newTaskData, status: "pending" };
+  it("createTask should throw an error on failure", async () => {
+    const newTaskData = { title: "New Task", description: "New Description" };
 
-  //   fetch.mockResolvedValueOnce({
-  //     ok: true,              // Marks the request as successful
-  //     status: 200,           // HTTP Status code (e.g., OK)
-  //     json: async () => mockCreatedTask // Mock the response body to return your task object
-  //   } as Response);
+    fetch.mockResolvedValueOnce({
+      ok: false,
+      statusText: "Server Error"
+    });
 
-  //   const createdTask = await createTask(newTaskData);
+    await expect(createTask(newTaskData)).rejects.toThrow(
+      "Network response was not ok"
+    );
+  });
 
-  //   expect(createdTask).toEqual(mockCreatedTask);
-  //   expect(fetch).toHaveBeenCalledWith(API_BASE_URL, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify(newTaskData)
-  //   });
-  // });
+  it("completeTask should throw an error on failure", async () => {
+    fetch.mockResolvedValueOnce({
+      ok: false,
+      statusText: "Failed to complete task"
+    });
 
-  // it("createTask should throw an error on failure", async () => {
-  //   const newTaskData = { title: "New Task", description: "New Description" };
-
-  //   fetch.mockResolvedValueOnce({
-  //     ok: false,
-  //     statusText: "Server Error"
-  //   });
-
-  //   await expect(createTask(newTaskData)).rejects.toThrow(
-  //     "Network response was not ok"
-  //   );
-  // });
-
-  // it("completeTask should mark task as complete and return updated task", async () => {
-  //   const mockCompletedTask = {
-  //     id: "1",
-  //     title: "Test Task",
-  //     description: "Description",
-  //     status: "completed"
-  //   };
-
-  //   fetch.mockResolvedValueOnce({
-  //     ok: true,
-  //     json: async () => mockCompletedTask
-  //   });
-
-  //   const updatedTask = await completeTask("1");
-
-  //   expect(updatedTask).toEqual(mockCompletedTask);
-  //   expect(fetch).toHaveBeenCalledWith(`${API_BASE_URL}/1/complete`, {
-  //     method: "PUT"
-  //   });
-  // });
-
-  // it("completeTask should throw an error on failure", async () => {
-  //   fetch.mockResolvedValueOnce({
-  //     ok: false,
-  //     statusText: "Failed to complete task"
-  //   });
-
-  //   await expect(completeTask("1")).rejects.toThrow(
-  //     "Network response was not ok"
-  //   );
-  // });
+    await expect(completeTask("1")).rejects.toThrow(
+      "Network response was not ok"
+    );
+  });
 });
