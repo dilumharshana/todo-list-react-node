@@ -1,12 +1,12 @@
 const mysql = require("mysql2/promise");
 
-class DatabaseConnection {
-  // Private static instance to ensure only one instance of the pool is created
-  static #instance;
-
+class Database {
   constructor() {
+    // Private instance variable
+    this._pool = null;
+
     // Database connection configuration
-    this.dbConfig = {
+    this._dbConfig = {
       connectionLimit: 10,
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
@@ -15,21 +15,28 @@ class DatabaseConnection {
       waitForConnections: true,
       queueLimit: 0
     };
-    this.pool = mysql.createPool(this.dbConfig);
   }
 
-  // Method to get the Singleton instance
+  // Static method to get the singleton instance
   static getInstance() {
-    if (!DatabaseConnection.#instance) {
-      DatabaseConnection.#instance = new DatabaseConnection();
+    if (!Database.instance) {
+      Database.instance = new Database();
     }
-    return DatabaseConnection.#instance;
+    return Database.instance;
   }
 
-  // Method to test the database connection
+  // Get the pool connection (create if doesn't exist)
+  getPool() {
+    if (!this._pool) {
+      this._pool = mysql.createPool(this._dbConfig);
+    }
+    return this._pool;
+  }
+
+  // Function to test the database connection
   async testConnection() {
     try {
-      const connection = await this.pool.getConnection();
+      const connection = await this.getPool().getConnection();
       console.log("Database connection established successfully");
       connection.release();
       return true;
@@ -40,12 +47,19 @@ class DatabaseConnection {
   }
 }
 
-// Initialize connection on import (Singleton instance)
+// Initialize singleton and connection on import
+const db = Database.getInstance();
+
+// Initialize connection on import (except in test environment)
 (async () => {
   if (process.env.NODE_ENV !== "test") {
-    const dbConnection = DatabaseConnection.getInstance();
-    await dbConnection.testConnection();
+    await db.testConnection();
   }
 })();
 
-module.exports = DatabaseConnection;
+// For backwards compatibility with existing code that uses pool.query()
+module.exports = {
+  pool: db.getPool(), // Expose the pool directly for existing code
+  getPool: () => db.getPool(), // Method to get the pool
+  testConnection: () => db.testConnection() // Expose the test method
+};
