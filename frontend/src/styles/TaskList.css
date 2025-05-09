@@ -1,19 +1,228 @@
-.task-list {
-  margin-top: 20px;
+/* TaskList.css - Styles for the task list component */
+
+.task-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
-.loading,
-.error,
+/* Empty state */
 .no-tasks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 20px;
-  color: #666;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin-top: 20px;
+  padding: var(--space-12);
+  color: var(--color-text-muted);
+  background-color: var(--color-background-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
+.no-tasks svg {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+  width: 64px;
+  height: 64px;
+  opacity: 0.5;
+}
+
+.no-tasks p {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+}
+
+.no-tasks span {
+  font-size: 0.875rem;
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-8);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* Task card skeleton for loading state */
+.task-card-skeleton {
+  background-color: var(--color-background-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 70%;
+  background-color: var(--color-skeleton);
+  border-radius: var(--radius-sm);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton-description {
+  height: 16px;
+  width: 90%;
+  background-color: var(--color-skeleton);
+  border-radius: var(--radius-sm);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  margin-bottom: var(--space-2);
+}
+
+.skeleton-description:last-child {
+  width: 60%;
+}
+
+/* Error state */
 .error {
-  color: #d32f2f;
-  background-color: #ffebee;
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  color: var(--color-danger);
+}
+
+[data-theme="dark"] .error {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.error p {
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+}
+
+.error pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  font-family: monospace;
+  overflow-x: auto;
+  margin-bottom: var(--space-2);
+}
+
+.retry-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-danger);
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.retry-button:hover {
+  background-color: #dc2626;
+}
+
+.retry-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Filter and sort controls */
+.task-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-background-card);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-button {
+  background: none;
+  border: none;
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+}
+
+.filter-button.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.sort-select {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background-card);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+}
+
+/* Animation for task list */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation for individual task items */
+.task-animation-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.task-animation-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.task-animation-exit {
+  opacity: 1;
+}
+
+.task-animation-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .task-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .task-card-skeleton {
+    padding: var(--space-3);
+  }
 }

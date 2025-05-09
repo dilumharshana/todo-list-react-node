@@ -26,22 +26,7 @@ class TaskController {
    * @param {Object} res - Express response object
    * @param {Function} next - Express next middleware function
    */
-  static async getTaskById(req, res, next) {
-    try {
-      const { id } = req.params;
-
-      // Validate ID
-      const { error, value } = validateTaskId(id);
-      if (error) {
-        return res.status(400).json({ error: error.message });
-      }
-
-      const task = await TaskService.getTaskById(value);
-      res.status(200).json(task);
-    } catch (error) {
-      next(error);
-    }
-  }
+  v;
 
   /**
    * Create a new task

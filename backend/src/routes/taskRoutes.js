@@ -11,13 +11,6 @@ const router = express.Router();
 router.get("/tasks", TaskController.getRecentTasks);
 
 /**
- * @route   GET /api/tasks/:id
- * @desc    Get a task by ID
- * @access  Public
- */
-router.get("/:id", TaskController.getTaskById);
-
-/**
  * @route   POST /api/tasks
  * @desc    Create a new task
  * @access  Public

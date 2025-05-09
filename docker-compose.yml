@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development 
+    ports:
+      - "5173:5173" 
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules 
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+  # Backend service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - DB_HOST=database
+      - DB_USER=root
+      - DB_PASSWORD=secret
+      - DB_NAME=tododb
+      - DB_PORT=3306  
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+  # Database service
+  database:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=tododb
+      - MYSQL_USER=todouser
+      - MYSQL_PASSWORD=todopassword
+    ports:
+      - "3307:3306" 
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+# Persistent volumes
+volumes:
+  mysql-data:
+
+# Application network
+networks:
+  todo-network:
+    driver: bridge

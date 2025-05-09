@@ -11,8 +11,6 @@ const dbConfig = {
   queueLimit: 0
 };
 
-console.log(dbConfig);
-
 // Create a pool connection
 const pool = mysql.createPool(dbConfig);
 
@@ -20,7 +18,7 @@ const pool = mysql.createPool(dbConfig);
 const testConnection = async () => {
   try {
     const connection = await pool.getConnection();
-    console.log("Database connection established successfully");
+    ("Database connection established successfully");
     connection.release();
     return true;
   } catch (error) {
