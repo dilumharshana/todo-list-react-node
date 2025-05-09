@@ -2,7 +2,7 @@ import React from 'react';
 
 import type { Task } from '../types';
 
-// style imports 
+// style imports  
 import '../styles/TaskCard.css';
 
 interface TaskCardProps {
@@ -20,7 +20,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete }) => {
     };
 
     return (
-        <div className="task-card">
+        <div className="task-card" data-completed={task.completed}>
             <div className="task-status"></div>
             <div className="task-content">
                 <div className="task-header">
@@ -35,6 +35,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete }) => {
                 <div className="task-description">
                     {task.description}
                 </div>
+
                 {!task.completed && (
                     <div className="task-actions">
                         <button className="done-button" onClick={handleComplete}>Mark as Done</button>

@@ -1,14 +1,94 @@
+/* Header.css - Styling for the app header */
+
 .header {
-  padding: 20px 0;
-  background-color: #f5f5f5;
-  text-align: center;
-  border-bottom: 1px solid #e0e0e0;
-  margin-bottom: 20px;
+  background-color: transparent;
+  padding: 1.5rem 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
 }
 
 .header h1 {
+  color: white;
+  font-size: 1.7rem;
+  font-weight: 600;
   margin: 0;
-  color: #333;
-  font-size: 24px;
-  font-weight: 500;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.header h1::before {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8.29 13.29a.996.996 0 0 1-1.41 0l-3.29-3.29a1 1 0 0 1 1.41-1.41L11 15.17l6.88-6.88a1 1 0 0 1 1.41 1.41l-7.58 7.59z'/%3E%3C/svg%3E");
+  background-size: contain;
+  margin-right: 12px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  transition: var(--transition);
+}
+
+.user-info:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  overflow: hidden;
+}
+
+.user-avatar svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--primary-color);
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.user-role {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+@media (max-width: 576px) {
+  .header {
+    padding: 1rem 0;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header h1::before {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
 }

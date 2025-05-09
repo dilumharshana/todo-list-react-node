@@ -7,12 +7,12 @@ import { TaskListProps, type Task } from '../types';
 import ErrorFallback from './ErrorFallback';
 import TaskCardFallback from './TaskCardFallback';
 
-// style imports 
+// style imports  
 import '../styles/TaskList.css';
 
 const TaskCard = lazy(() => import('./TaskCard'));;
 
-const TaskListLoader: React.FC<TaskListProps> = ({ refreshTrigger }) => {
+const TaskList: React.FC<TaskListProps> = ({ refreshTrigger }) => {
     const queryClient = useQueryClient();
 
     const { data: tasks = [] as Task[] } = useQuery<Task[], Error>({
@@ -33,11 +33,15 @@ const TaskListLoader: React.FC<TaskListProps> = ({ refreshTrigger }) => {
     };
 
     if (tasks.length === 0) {
-        return <div className="no-tasks">No tasks found. Add a new task to get started!</div>;
+        return (
+            <div className="no-tasks">
+                No tasks found. Add a new task to get started!
+            </div>
+        );
     }
 
     return (
-        <>
+        <div className="task-list">
             {tasks.map((task: Task) => (
                 <ErrorBoundary
                     key={task.id}
@@ -52,8 +56,8 @@ const TaskListLoader: React.FC<TaskListProps> = ({ refreshTrigger }) => {
                     </Suspense>
                 </ErrorBoundary>
             ))}
-        </>
+        </div>
     );
 };
 
-export default TaskListLoader
+export default TaskList;

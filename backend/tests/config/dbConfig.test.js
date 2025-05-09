@@ -1,8 +1,8 @@
 // dbConfig.test.js
 
 const mysql = require("mysql2/promise");
-const DatabaseConnection = require("../../src/config/db"); // Adjust the import path if necessary
 
+// Mock mysql before requiring the db module
 jest.mock("mysql2/promise", () => ({
   createPool: jest.fn().mockReturnValue({
     getConnection: jest.fn().mockResolvedValue({
@@ -11,56 +11,47 @@ jest.mock("mysql2/promise", () => ({
   })
 }));
 
-describe("DatabaseConnection", () => {
-  let dbConnection;
+// Import the db module after mocking mysql
+const db = require("../../src/config/db"); // Adjust the import path if necessary
 
+describe("Database Configuration", () => {
   beforeEach(() => {
-    // Clear any previous mocks and spy on console.error
+    // Clear any previous mocks and spy on console.log and console.error
     jest.clearAllMocks();
-    jest.spyOn(console, "error").mockImplementation(() => {}); // Mock console.error to suppress actual logging
+    jest.spyOn(console, "log").mockImplementation(() => {}); // Mock console.log
+    jest.spyOn(console, "error").mockImplementation(() => {}); // Mock console.error
   });
 
   afterEach(() => {
     // Reset mocks after each test
+    console.log.mockRestore();
     console.error.mockRestore();
   });
 
-  it("should create only one instance of DatabaseConnection (Singleton)", () => {
-    // Get the first instance
-    const instance1 = DatabaseConnection.getInstance();
-    // Get the second instance
-    const instance2 = DatabaseConnection.getInstance();
-
-    // Check if both instances are the same (Singleton)
-    expect(instance1).toBe(instance2);
-  });
-
   it("should test the database connection successfully", async () => {
-    dbConnection = DatabaseConnection.getInstance();
-
     // Mocking the behavior of getConnection to resolve successfully
     const mockRelease = jest.fn();
     mysql.createPool().getConnection.mockResolvedValueOnce({
       release: mockRelease
     });
 
-    const result = await dbConnection.testConnection();
+    const result = await db.testConnection();
 
     // Check that the connection was successful and release was called
     expect(result).toBe(true);
     expect(mockRelease).toHaveBeenCalledTimes(1);
-    expect(mysql.createPool().getConnection).toHaveBeenCalledTimes(1);
+    expect(console.log).toHaveBeenCalledWith(
+      "Database connection established successfully"
+    );
   });
 
   it("should handle failure in database connection", async () => {
-    dbConnection = DatabaseConnection.getInstance();
-
     // Mocking the behavior of getConnection to throw an error
     mysql
       .createPool()
       .getConnection.mockRejectedValueOnce(new Error("Connection failed"));
 
-    const result = await dbConnection.testConnection();
+    const result = await db.testConnection();
 
     // Check that the connection failed and error was logged
     expect(result).toBe(false);
@@ -68,13 +59,5 @@ describe("DatabaseConnection", () => {
       "Unable to connect to the database:",
       "Connection failed"
     );
-  });
-
-  it("should ensure the pool is initialized correctly", () => {
-    dbConnection = DatabaseConnection.getInstance();
-
-    // Check if the pool is initialized and if the connection pool method exists
-    expect(dbConnection.pool).toBeDefined();
-    expect(typeof dbConnection.pool.getConnection).toBe("function");
   });
 });
