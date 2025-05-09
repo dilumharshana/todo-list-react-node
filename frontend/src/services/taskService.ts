@@ -9,10 +9,6 @@ const API_URL = API_BASE_URL;
  *
  * @returns Promise<Task[]> - A list of Task objects.
  * @throws Error if the network request fails or response is not OK.
- *
- * Design Notes:
- * - Follows the Repository Pattern: encapsulates fetching logic separate from components.
- * - Promotes separation of concerns by isolating API logic.
  */
 export const fetchRecentTasks = async (): Promise<Task[]> => {
   try {
@@ -38,14 +34,10 @@ export const fetchRecentTasks = async (): Promise<Task[]> => {
  * @param taskData - Data required to create a new task.
  * @returns Promise<Task> - The created Task object.
  * @throws Error if the network request fails or response is not OK.
- *
- * Design Notes:
- * - Uses Command Pattern: sends a command (create) to the server.
- * - Data is serialized to JSON before being sent.
  */
 export const createTask = async (taskData: NewTaskData): Promise<Task> => {
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -70,10 +62,6 @@ export const createTask = async (taskData: NewTaskData): Promise<Task> => {
  * @param taskId - The unique ID of the task to be marked complete.
  * @returns Promise<Task> - The updated Task object after completion.
  * @throws Error if the network request fails or response is not OK.
- *
- * Design Notes:
- * - Follows Command Pattern: issues a "complete" command.
- * - URL is dynamically composed using template literals.
  */
 export const completeTask = async (taskId: string): Promise<Task> => {
   try {

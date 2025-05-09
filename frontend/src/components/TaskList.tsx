@@ -1,11 +1,14 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { lazy, Suspense } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
+
 import { completeTask, fetchRecentTasks } from '../services/taskService';
-import '../styles/TaskList.css';
 import { TaskListProps, type Task } from '../types';
 import ErrorFallback from './ErrorFallback';
 import TaskCardFallback from './TaskCardFallback';
+
+// style imports 
+import '../styles/TaskList.css';
 
 const TaskCard = lazy(() => import('./TaskCard'));;
 

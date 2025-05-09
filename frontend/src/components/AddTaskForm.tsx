@@ -1,16 +1,17 @@
-import React, { useState, type FormEvent, type ChangeEvent } from 'react';
-import '../styles/AddTaskForm.css';
+import React, { useState, type ChangeEvent, type FormEvent } from 'react';
+
+import { MAX_DESCRIPTION_LENGTH, MAX_TITLE_LENGTH } from '../configs';
+import { getCharCounterClass, validateTitle } from '../helpers/ValidationHelper';
+import { createTask } from '../services/taskService';
 import type { Task } from '../types';
-import { API_BASE_URL } from '../configs';
+
+// style imports  
+import '../styles/AddTaskForm.css';
 
 interface AddTaskFormProps {
     onTaskAdded: (task: Task) => void;
     onCancel?: () => void; // Optional prop for cancellation
 }
-
-// Max character limits for fields
-const MAX_TITLE_LENGTH = 100;
-const MAX_DESCRIPTION_LENGTH = 500;
 
 const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onCancel }) => {
     // Form state
@@ -33,20 +34,6 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onCancel }) => {
         description: false
     });
 
-    // Validate the title field
-    const validateTitle = (value: string): string | undefined => {
-        if (!value.trim()) {
-            return 'Task title is required';
-        }
-        if (value.trim().length < 3) {
-            return 'Title must be at least 3 characters';
-        }
-        if (value.length > MAX_TITLE_LENGTH) {
-            return `Title cannot exceed ${MAX_TITLE_LENGTH} characters`;
-        }
-        return undefined;
-    };
-
     // Handle field changes with validation
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newTitle = e.target.value;
@@ -59,6 +46,7 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onCancel }) => {
         }
     };
 
+    // handle description change 
     const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const newDescription = e.target.value;
         // Prevent exceeding max length
@@ -93,52 +81,30 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onCancel }) => {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/tasks`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ title: title.trim(), description: description.trim() }),
-            });
+            const task = { title: title.trim(), description: description.trim() };
+            const newTask: Task = await createTask(task);
 
-            if (response.ok) {
-                const newTask = await response.json();
-                onTaskAdded(newTask);
+            onTaskAdded(newTask);
 
-                // Reset form and validation states
-                setTitle('');
-                setDescription('');
-                setErrors({});
-                setTouched({ title: false, description: false });
-            } else {
-                // Handle API error response
-                const errorData = await response.json().catch(() => null);
-                setErrors({
-                    title: errorData?.errors?.title || 'Failed to add task. Please try again.',
-                });
-            }
+            // Reset form and validation states
+            setTitle('');
+            setDescription('');
+            setErrors({});
+            setTouched({ title: false, description: false });
         } catch (error) {
             console.error('Error adding task:', error);
             setErrors({
-                title: 'Network error. Please check your connection and try again.'
+                title: 'Failed to add task. Please try again.',
             });
         } finally {
             setIsSubmitting(false);
         }
-    };
 
-    // Helper to determine character counter class based on length
-    const getCharCounterClass = (current: number, max: number) => {
-        if (current >= max) return 'char-counter limit-reached';
-        if (current >= max * 0.8) return 'char-counter limit-close';
-        return 'char-counter';
     };
 
     return (
         <div className="add-task-form-container">
             <h2>
-                {/* Uncomment if using icons */}
-                {/* <PlusCircle size={20} /> */}
                 Add a Task
             </h2>
 

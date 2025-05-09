@@ -1,5 +1,8 @@
 import React from 'react';
+
 import type { Task } from '../types';
+
+// style imports 
 import '../styles/TaskCard.css';
 
 interface TaskCardProps {

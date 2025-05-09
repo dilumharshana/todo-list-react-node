@@ -1,6 +1,8 @@
 // interface of task
 // Define the Task interface
 export interface Task {
+  json(): unknown;
+  ok: unknown;
   id: string;
   title: string;
   description: string;
