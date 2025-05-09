@@ -2,8 +2,6 @@ import React, { useState, type FormEvent, type ChangeEvent } from 'react';
 import '../styles/AddTaskForm.css';
 import type { Task } from '../types';
 import { API_BASE_URL } from '../configs';
-// Optional: Import icons if you're using a library like lucide-react
-// import { PlusCircle, Check, X } from 'lucide-react';
 
 interface AddTaskFormProps {
     onTaskAdded: (task: Task) => void;
@@ -189,8 +187,6 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onCancel }) => {
                         className="add-button"
                         disabled={isSubmitting || Boolean(errors.title) || !title.trim()}
                     >
-                        {/* Uncomment if using icons */}
-                        {/* isSubmitting ? <Loader size={16} /> : <Check size={16} /> */}
                         {isSubmitting ? 'Adding...' : 'Add Task'}
                     </button>
 
@@ -201,8 +197,6 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onCancel }) => {
                             onClick={onCancel}
                             disabled={isSubmitting}
                         >
-                            {/* Uncomment if using icons */}
-                            {/* <X size={16} /> */}
                             Cancel
                         </button>
                     )}

@@ -1,32 +1,15 @@
-import React, { lazy, Suspense } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { lazy, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { type Task } from '../types';
-import { fetchRecentTasks, completeTask } from '../services/taskService';
+import { completeTask, fetchRecentTasks } from '../services/taskService';
 import '../styles/TaskList.css';
+import { TaskListProps, type Task } from '../types';
+import ErrorFallback from './ErrorFallback';
+import TaskCardFallback from './TaskCardFallback';
 
-const TaskCard = lazy(() => import('./TaskCard'));
+const TaskCard = lazy(() => import('./TaskCard'));;
 
-interface TaskListProps {
-    refreshTrigger: number;
-}
-
-const TaskCardFallback = () => (
-    <div className="task-card-skeleton">
-        <div className="skeleton-title"></div>
-        <div className="skeleton-description"></div>
-    </div>
-);
-
-const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => (
-    <div className="error">
-        <p>Something went wrong:</p>
-        <pre>{error.message}</pre>
-        <button onClick={resetErrorBoundary} className="retry-button">Try again</button>
-    </div>
-);
-
-const TaskList: React.FC<TaskListProps> = ({ refreshTrigger }) => {
+const TaskListLoader: React.FC<TaskListProps> = ({ refreshTrigger }) => {
     const queryClient = useQueryClient();
 
     const { data: tasks = [] as Task[] } = useQuery<Task[], Error>({
@@ -70,23 +53,4 @@ const TaskList: React.FC<TaskListProps> = ({ refreshTrigger }) => {
     );
 };
 
-const TaskListWithSuspense: React.FC<TaskListProps> = (props) => {
-    const queryClient = useQueryClient();
-
-    const handleReset = () => {
-        queryClient.invalidateQueries({ queryKey: ['tasks'] });
-    };
-
-    return (
-        <ErrorBoundary
-            FallbackComponent={ErrorFallback}
-            onReset={handleReset}
-        >
-            <Suspense fallback={<div className="loading">Loading tasks...</div>}>
-                <TaskList {...props} />
-            </Suspense>
-        </ErrorBoundary>
-    );
-};
-
-export default TaskListWithSuspense;
+export default TaskListLoader

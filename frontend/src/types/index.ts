@@ -12,3 +12,7 @@ export interface NewTaskData {
   title: string;
   description: string;
 }
+// interface of task list
+export interface TaskListProps {
+  refreshTrigger: number;
+}
