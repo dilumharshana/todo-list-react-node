@@ -17,8 +17,7 @@
   left: 0;
   right: 0;
   height: 5px;
-  background: linear-gradient(90deg, #7b68ee, #9370db);
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  border-radius: 10px !important;
 }
 
 .add-task-form-container h2 {

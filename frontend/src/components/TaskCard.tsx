@@ -30,7 +30,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete }) => {
                         </svg>
                         {task.title}
                     </div>
-                    <span className="task-badge">{task.completed ? 'Completed' : 'Pending'}</span>
                 </div>
                 <div className="task-description">
                     {task.description}
